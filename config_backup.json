@@ -32,10 +32,6 @@
         {
             "name": "Park",
             "description": "A place for people to relax and enjoy nature. Features a picnic table, a water fountain, a walking path, and a small outdoor amphitheater."
-        },
-        {
-            "name": "Theater",
-            "description": "A place for people to watch movies and live performances. Features a stage, a projector, a concession stand, and a ticket booth."
         }
     ],
     "agents": [
@@ -77,21 +73,6 @@
                 "Bring emotional depth to the performances.",
                 "Ensure the performances have a good balance of comedy and heartfelt scenes.",
                 "Create memorable characters that resonate with the audience."
-            ],
-            "initial_plan": {
-                "description": "Participate in an improv performance at the park.",
-                "stop_condition": "The performance has ended.",
-                "location": "Park"
-            }
-        },
-        {
-            "first_name": "Samantha",
-            "private_bio": "Samantha is a creative and imaginative improviser who is always ready to try something new. At 35 years old, she is the most adventurous member of the troupe, often pushing the boundaries of what is possible in an improv performance. She loves to experiment with different styles and techniques and is always looking for ways to surprise the audience. In her downtime, she enjoys painting and playing video games with her partner, Chris.",
-            "public_bio": "Samantha, the most creative member of our troupe, is always looking for ways to push the boundaries of improv. She loves to experiment with different styles and techniques and is always ready to try something new. She is known for her imaginative characters and unique performances.",
-            "directives": [
-                "Push the boundaries of improv.",
-                "Experiment with different styles and techniques.",
-                "Surprise the audience with unexpected twists and turns."
             ],
             "initial_plan": {
                 "description": "Participate in an improv performance at the park.",

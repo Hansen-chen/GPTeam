@@ -69,18 +69,18 @@ def run_in_new_loop(coro):
 
 
 def run():
-    process_discord = Process(target=discord_listener)
+    #process_discord = Process(target=discord_listener)
     process_world = Process(target=run_world)
     process_server = Process(target=run_server)
 
-    process_discord.start()
+    #process_discord.start()
     process_world.start()
     process_server.start()
 
     sleep(3)
     webbrowser.open("http://127.0.0.1:5000")
 
-    process_discord.join()
+    #process_discord.join()
     process_world.join()
     process_server.join()
 

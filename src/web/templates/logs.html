@@ -18,6 +18,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
 
   <script type="text/babel">
+
   var colorMapping = {
     'GENERAL': 'white',
     'ERROR': 'red',
@@ -34,6 +35,7 @@
     'AGENT_8': 'lightblue',
     'AGENT_9': 'green'
   }
+
 
 
 
@@ -84,14 +86,39 @@
           {!worldState && <Loading />}
           {worldState && <WorldVisualisation worldState={worldState} logs={logs} />}
         </div>
+
       );
     }
 
     function WorldVisualisation({ worldState, logs }) {
+      const [worldPause, setWorldPause] = React.useState(false);
+      function handlePauseClick() {
+        fetch('/api/PauseWorld', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({'PauseWorld':!worldPause}),
+        })
+        .then(response => {
+            if (response.ok) {
+                response.json().then(data=> {
+                  setWorldPause(data.PauseWorld);
+                })
+            } else {
+                alert('Something went wrong, please try again later.');
+                throw new Error('Something went wrong, please try again later.');
+            }
+        })
+        
+        
+        
+      }
       return (
         <div className="flex flex-col py-2">
           <div className="w-full my-2 px-6 text-center">
             <h1 className="text-xl font-bold">🌎&nbsp;&nbsp;{worldState.name}</h1>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handlePauseClick}>
+                {worldPause ? 'Resume' : 'Pause'} World
+            </button>
           </div>
           <div className="h-screen flex w-screen px-3">
             {worldState && worldState.agents.map((agent) => <AgentWindow agent={agent} logLines={logs[agent.full_name] || []} columnWidth={`${100 / worldState.agents.length}%`} />)}

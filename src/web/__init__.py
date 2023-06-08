@@ -4,7 +4,7 @@ import os
 import re
 
 from dotenv import load_dotenv
-from quart import Quart, abort, make_response, send_file, websocket
+from quart import Quart, abort, make_response, send_file, websocket, request
 
 from src.utils.database.base import Tables
 from src.utils.database.client import get_database
@@ -83,10 +83,41 @@ def get_server():
                 for agent in agents
             ]
 
+            #add human agent to the list
+            agents_state.append({"full_name": "Human Agent", "location": "N/A"})
+
             sorted_agents = sorted(agents_state, key=lambda k: k["full_name"])
+
+
 
             await websocket.send_json(
                 {"agents": sorted_agents, "name": worlds[0]["name"]}
             )
+
+    @app.post("/api/PauseWorld")
+    async def PauseWorld():
+        data = await request.get_json()
+        
+        #get json data's PauseWorld value
+        pauseWorld = data["PauseWorld"]
+
+        file_path = os.path.join(os.path.dirname(__file__), "logs/human_interaction.txt")
+
+        # Read the file and parse it to a dictionary
+        human_interaction = {}
+        with open(file_path, 'r') as f:
+            for line in f:
+                key, value = line.strip().split(':')
+                human_interaction[key] = value
+
+        # Update the values in the dictionary
+        human_interaction['PauseWorld'] = pauseWorld
+
+        # Write the updated dictionary back to the file
+        with open(file_path, 'w') as f:
+            for key, value in human_interaction.items():
+                f.write(f"{key}:{value}\n")
+
+        return {"PauseWorld":pauseWorld}
 
     return app
