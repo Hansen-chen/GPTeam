@@ -1067,23 +1067,24 @@ class Agent(BaseModel):
                 key, value = line.strip().split(':')
                 human_interaction[key] = value
 
+
+        # Decide how to react to these events
+        self.react_response = await self._react(events)
+
+        # If the reaction calls to cancel the current plan, remove the first one
+        if self.react_response.reaction == Reaction.CANCEL:
+            self.plans = self.plans[1:]
+
+        # If the reaction calls to postpone the current plan, insert the new plan at the top
+        elif self.react_response.reaction == Reaction.POSTPONE:
+            self.plans.insert(0, self.react_response.new_plan)
+
         if human_interaction['PauseWorld'] == 'False':
-            # Decide how to react to these events
-            self.react_response = await self._react(events)
-
-            # If the reaction calls to cancel the current plan, remove the first one
-            if self.react_response.reaction == Reaction.CANCEL:
-                self.plans = self.plans[1:]
-
-            # If the reaction calls to postpone the current plan, insert the new plan at the top
-            elif self.react_response.reaction == Reaction.POSTPONE:
-                self.plans.insert(0, self.react_response.new_plan)
-
             # Work through the plans
             await self._do_first_plan()
 
-            # Reflect, if we should
-            if await self._should_reflect():
-                await self._reflect()
+        # Reflect, if we should
+        if await self._should_reflect():
+            await self._reflect()
 
-            await self.write_progress_to_file()
+        await self.write_progress_to_file()
